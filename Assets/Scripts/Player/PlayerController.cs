@@ -60,6 +60,15 @@ public class PlayerController : MonoBehaviour
 		Util.PrintBox(x - dx, y - dy, x + dx, y + dy);
 		HandleInput();
 		Jump();
+
+		if (Input.GetKeyDown(KeyCode.H))
+		{
+			Debug.Log("inventory info");
+			foreach(var item in PlayerInventory.itemList)
+			{
+				Debug.Log(string.Format("itemId:{0}, num:{1}", item.Key, item.Value));
+			}
+		}
 	}
 
 	private void FixedUpdate()

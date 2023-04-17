@@ -38,7 +38,7 @@ public class PhysicalController
 
 	private void Move()
 	{
-		float xInput = Input.GetAxisRaw("Horizontal");
+		float xInput = InputManager.GetAxisHorizontal();
 		float speedX = playerRb.velocity.x;
 		float speedSign = Mathf.Sign(speedX);
 		float deltaSpeedX = 0f;

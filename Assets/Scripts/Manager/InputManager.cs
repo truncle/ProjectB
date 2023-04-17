@@ -31,12 +31,15 @@ public static class InputManager
 		{KeyCode.R, InputType.UseItem },
 
 		{KeyCode.KeypadEnter, InputType.OK },
+		{KeyCode.Return, InputType.OK },
 		{KeyCode.Escape, InputType.Cancel },
 	};
 
 	private static List<InputType> InputList = new();
 	private static List<InputType> KeyDownList = new();
 	private static List<InputType> KeyUpList = new();
+
+	private static bool disableInput = false;
 
 	//每次Update的时候更新一下输入列表
 	public static void Update()
@@ -73,17 +76,29 @@ public static class InputManager
 	}
 
 	//获取输入
-	public static bool GetInput(InputType input)
+	public static bool GetInput(InputType input, bool raw = false)
 	{
+		if (!raw && disableInput)
+			return false;
 		return InputList.Contains(input);
 	}
-	public static bool GetKeyDown(InputType input)
+	public static bool GetKeyDown(InputType input, bool raw = false)
 	{
+		if (!raw && disableInput)
+			return false;
 		return KeyDownList.Contains(input);
 	}
-	public static bool GetKeyUp(InputType input)
+	public static bool GetKeyUp(InputType input, bool raw = false)
 	{
+		if (!raw && disableInput)
+			return false;
 		return KeyUpList.Contains(input);
+	}
+	public static float GetAxisHorizontal(bool raw = false)
+	{
+		if (!raw && disableInput)
+			return 0f;
+		return Input.GetAxisRaw("Horizontal");
 	}
 
 	//额外添加输入
@@ -98,5 +113,15 @@ public static class InputManager
 	public static void AddKeyUp(InputType input)
 	{
 		KeyUpList.Add(input);
+	}
+
+	//限制输入
+	public static void DisableInput()
+	{
+		disableInput = true;
+	}
+	public static void EnableInput()
+	{
+		disableInput = false;
 	}
 }
