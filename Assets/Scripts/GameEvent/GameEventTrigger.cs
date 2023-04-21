@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using static UnityEditor.Progress;
 
@@ -10,6 +11,8 @@ public class GameEventTrigger : MonoBehaviour
 	private bool canTrigger = false;
 
 	private EventStatus eventStatus = EventStatus.NotTriggered;
+
+	private GameObject textWindow;
 
 	// Start is called before the first frame update
 	void Start()
@@ -68,6 +71,10 @@ public class GameEventTrigger : MonoBehaviour
 		{
 			eventStatus = EventStatus.Triggered;
 			InputManager.EnableInput();
+			if (textWindow)
+			{
+				Destroy(textWindow);
+			}
 		}
 		//todo是否需要删除事件？
 	}
@@ -81,7 +88,16 @@ public class GameEventTrigger : MonoBehaviour
 	//todo 执行事件的具体方式。应该需要非常复杂
 	private void TriggerEvent(GameEventData eventData)
 	{
-		Debug.Log(string.Format("Trigger event, event text:{0}", eventData.eventText));
+		Debug.Log(string.Format("Trigger event id:{0}", eventData.id));
+		if (eventData.type == EventType.Script)
+		{
+			string scriptText = ScriptTable.GetScript(eventData.scriptId).PrintScript();
+			GameObject textWindowPrefab = Util.LoadPrefab("UI TextWindow");
+			textWindow = Instantiate(textWindowPrefab);
+			TextMeshProUGUI tmp = textWindow.GetComponentInChildren<TextMeshProUGUI>();
+			tmp.SetText(scriptText);
+		}
+
 		if (eventData.blockInput)
 		{
 			eventStatus = EventStatus.Running;

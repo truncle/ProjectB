@@ -28,7 +28,6 @@ public static class PlayerInventory
 		itemList.Add(itemId, itemNum);
 	}
 
-
 	public static void UseItem(int itemId, int num = 1)
 	{
 		//todo 道具的使用功能

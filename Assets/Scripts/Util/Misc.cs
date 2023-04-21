@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 
 static class Util
 {
+	static string prefabPath = "Prefabs/";
+
 	static public void PrintBox(Vector2 topLeft, Vector2 bottomRight)
 	{
 		PrintBox(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
@@ -40,5 +43,12 @@ static class Util
 				return false;
 		}
 		return true;
+	}
+
+	static public GameObject LoadPrefab(string path)
+	{
+		string finalPath = prefabPath + path;
+		Debug.Log(finalPath);
+		return Resources.Load<GameObject>(finalPath);
 	}
 }

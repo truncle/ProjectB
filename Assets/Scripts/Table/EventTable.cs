@@ -9,16 +9,18 @@ public struct GameEventData
 {
 	public int id;
 	public EventType type;
-	public string eventText;
 	public bool blockInput;
+
+	public int scriptId; //代表事件指向一段剧本(对话等)
 }
 
 //todo 一些事件类型，如对话(npc交互，场景交互，剧情推进),拾取道具,场景切换
 public enum EventType
 {
-	Normal, Talk, PickItem
+	Normal, Script, PickItem
 }
 
+// 事件状态
 public enum EventStatus
 {
 	NotTriggered, Running, Triggered,
@@ -30,18 +32,16 @@ public static class GameEventTable
 		new(){
 			id = 0,
 			type = EventType.Normal,
-			eventText = "空事件",
 		},
 		new(){
 			id = 1,
-			type = EventType.Talk,
-			eventText = "测试事件1:对话事件",//todo 生成对话框
+			type = EventType.Script,
+			scriptId = 2,
 			blockInput = true,
 		},
 		new(){
 			id = 2,
 			type = EventType.PickItem,
-			eventText = "测试事件2:拾取道具事件",
 		},
 	};
 

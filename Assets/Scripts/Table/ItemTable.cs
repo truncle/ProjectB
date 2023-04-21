@@ -26,7 +26,7 @@ static public class ItemTable
 			autoPick = true,
 		},
 		new(){
-			id = 1,
+			id = 2,
 			name = "测试道具2",
 			eventId = 1,
 			autoPick = false,
