@@ -6,6 +6,8 @@ public class FollowPlayer : MonoBehaviour
 {
 	Transform playerTransform;
 	// Start is called before the first frame update
+	[SerializeField] float playerpositionx;
+	[SerializeField] float playerpositiony;
 	void Start()
 	{
 		playerTransform = GameObject.Find("Player").GetComponent<Transform>();
@@ -18,6 +20,6 @@ public class FollowPlayer : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		transform.position = new Vector3(playerTransform.position.x, playerTransform.position.y, transform.position.z);
+		transform.position = new Vector3(playerTransform.position.x + playerpositionx, playerTransform.position.y + playerpositiony, transform.position.z);
 	}
 }

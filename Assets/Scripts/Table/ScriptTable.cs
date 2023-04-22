@@ -54,9 +54,7 @@ public static class ScriptTable
 			text = "这是一段对话",
 			dialog = new List<ScriptDialog>()
 			{
-				new(){ text = "你好", characterId = 1 , expressionId = 0},
-				new(){ text = "我好", characterId = 2 , expressionId = 0},
-				new(){ text = "大家好", characterId = 1 , expressionId = 0},
+				new(){ text = "我要快些回家", characterId = 1 , expressionId = 0},
 			}
 		},
 	};
