@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour
 	private Collider2D groundSensor;
 	private Collider2D wallSensor;
 
+	[SerializeField]
+	private GameObject bullet;
+	private float bulletLifetime = 3f;
+
 	private ContactFilter2D groundFilter;
 
 	private Animator animator;
@@ -64,7 +68,7 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetKeyDown(KeyCode.H))
 		{
 			Debug.Log("inventory info");
-			foreach(var item in PlayerInventory.itemList)
+			foreach (var item in PlayerInventory.itemList)
 			{
 				Debug.Log(string.Format("itemId:{0}, num:{1}", item.Key, item.Value));
 			}
@@ -123,6 +127,12 @@ public class PlayerController : MonoBehaviour
 		});
 
 		playerActionManager.AddInputAction(inputActions);
+
+		// todo 临时用的方法，需要改进
+		if (InputManager.GetKeyDown(InputType.Skill))
+		{
+			Shoot();
+		}
 	}
 
 	public void Jump()
@@ -173,6 +183,17 @@ public class PlayerController : MonoBehaviour
 		else
 		{
 			onWall = false;
+		}
+	}
+
+	private void Shoot()
+	{
+		if (bullet != null)
+		{
+			GameObject bulletInstance = Instantiate(bullet);
+			bulletInstance.SetActive(true);
+			bulletInstance.transform.position = transform.position;
+			Destroy(bulletInstance, bulletLifetime);
 		}
 	}
 }

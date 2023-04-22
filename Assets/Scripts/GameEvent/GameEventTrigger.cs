@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 public class GameEventTrigger : MonoBehaviour
 {
@@ -18,7 +17,7 @@ public class GameEventTrigger : MonoBehaviour
 	void Start()
 	{
 		Collider2D collider = GetComponent<Collider2D>();
-		//todo ²¢·ÇºÏÊÊ·½Ê½
+		//todo å¹¶éåˆé€‚æ–¹å¼
 		if (collider == null)
 		{
 			collider = gameObject.AddComponent<BoxCollider2D>();
@@ -37,8 +36,8 @@ public class GameEventTrigger : MonoBehaviour
 	{
 		if (eventStatus != EventStatus.NotTriggered)
 			return;
-		//ÆäËû¶ÔÏóÒ²¿ÉÒÔ´¥·¢ÊÂ¼ş£¿
-		if (collision.CompareTag("Player"))
+		//å…¶ä»–å¯¹è±¡ä¹Ÿå¯ä»¥è§¦å‘äº‹ä»¶ï¼Ÿ
+		if (collision.CompareTag("Player") || collision.CompareTag("EventTrigger"))
 		{
 			canTrigger = true;
 		}
@@ -46,7 +45,7 @@ public class GameEventTrigger : MonoBehaviour
 
 	private void OnTriggerExit2D(Collider2D collision)
 	{
-		if (collision.CompareTag("Player"))
+		if (collision.CompareTag("Player") || collision.CompareTag("EventTrigger"))
 		{
 			canTrigger = false;
 		}
@@ -55,14 +54,14 @@ public class GameEventTrigger : MonoBehaviour
 	private void CheckTriggerEvent()
 	{
 		GameEventData eventData = GameEventTable.GetEvent(eventId);
-		//todo Ê°È¡µÀ¾ß¿ÉÄÜ»á´¥·¢ÊÂ¼ş, ¿ÉÄÜ»áÁ¢¼´ÉúĞ§, ĞèÒªÅĞ¶ÏÊÇ·ñĞèÒª½»»¥Ê°È¡¡£
+		//todo æ‹¾å–é“å…·å¯èƒ½ä¼šè§¦å‘äº‹ä»¶, å¯èƒ½ä¼šç«‹å³ç”Ÿæ•ˆ, éœ€è¦åˆ¤æ–­æ˜¯å¦éœ€è¦äº¤äº’æ‹¾å–ã€‚
 		if (canTrigger && (!GameEventTable.NeedInteract(eventData.type) || InputManager.GetKeyDown(InputType.Interact)))
 		{
 			TriggerEvent(eventData);
 		}
 	}
 
-	//todo ÍÆ½øÊÂ¼şµÄ·½Ê½£¬Ó¦¸ÃÒ²»áºÜ¸´ÔÓ
+	//todo æ¨è¿›äº‹ä»¶çš„æ–¹å¼ï¼Œåº”è¯¥ä¹Ÿä¼šå¾ˆå¤æ‚
 	private void CheckUpdateEvent()
 	{
 		if (eventStatus != EventStatus.Running)
@@ -76,7 +75,7 @@ public class GameEventTrigger : MonoBehaviour
 				Destroy(textWindow);
 			}
 		}
-		//todoÊÇ·ñĞèÒªÉ¾³ıÊÂ¼ş£¿
+		//todoæ˜¯å¦éœ€è¦åˆ é™¤äº‹ä»¶ï¼Ÿ
 	}
 
 	private void TriggerEvent(int eventId)
@@ -85,7 +84,7 @@ public class GameEventTrigger : MonoBehaviour
 		TriggerEvent(eventData);
 	}
 
-	//todo Ö´ĞĞÊÂ¼şµÄ¾ßÌå·½Ê½¡£Ó¦¸ÃĞèÒª·Ç³£¸´ÔÓ
+	//todo æ‰§è¡Œäº‹ä»¶çš„å…·ä½“æ–¹å¼ã€‚åº”è¯¥éœ€è¦éå¸¸å¤æ‚
 	private void TriggerEvent(GameEventData eventData)
 	{
 		Debug.Log(string.Format("Trigger event id:{0}", eventData.id));
