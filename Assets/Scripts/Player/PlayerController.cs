@@ -192,7 +192,18 @@ public class PlayerController : MonoBehaviour
 		{
 			GameObject bulletInstance = Instantiate(bullet);
 			bulletInstance.SetActive(true);
+			float rotation = transform.localScale.x > 0 ? 0 : 180;
 			bulletInstance.transform.position = transform.position;
+			bulletInstance.transform.rotation = Quaternion.Euler(0, 0, rotation);
+			MoveTrack moveTrack = bulletInstance.AddComponent<MoveTrack>();
+			moveTrack.AddPattern(0);
+			//moveTrack.AddInstruction(new()
+			//{
+			//	speed = 20f,
+			//	type = MoveType.Move,
+			//	startTime = 0f,
+			//	endTime = 1f,
+			//});
 			Destroy(bulletInstance, bulletLifetime);
 		}
 	}
