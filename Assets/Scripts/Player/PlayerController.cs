@@ -18,6 +18,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	private GameObject bullet;
 	private float bulletLifetime = 3f;
+	private float dashCoolDown = 1f;
+
 
 	private ContactFilter2D groundFilter;
 
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
 
 	public float timeScale = 1f;
 	public float lastGrounded = 0f;
+	public float lastDashTime = 0f;
 	public bool onWall = false;
 
 	private LayerMask groundLayerMask;
@@ -63,7 +66,6 @@ public class PlayerController : MonoBehaviour
 		float dy = playerCollider.bounds.extents.y;
 		Util.PrintBox(x - dx, y - dy, x + dx, y + dy);
 		HandleInput();
-		Jump();
 
 		if (Input.GetKeyDown(KeyCode.H))
 		{
@@ -87,6 +89,7 @@ public class PlayerController : MonoBehaviour
 
 	}
 
+	//解析玩家的按键输入，转化成角色的动作输入
 	public void HandleInput()
 	{
 		List<ActionId> inputActions = new();
@@ -94,6 +97,9 @@ public class PlayerController : MonoBehaviour
 		List<InputType> inputList = new();
 		//List<InputType> keyDownList = new();
 		//List<InputType> keyUpList = new();
+
+		bool doJump = CheckJump();
+		bool doDash = CheckDash();
 
 		List<InputType> keyDownInput = new() {
 			InputType.Attack, InputType.Jump, InputType.Dash, InputType.Skill,
@@ -135,18 +141,38 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	public void Jump()
+	public bool CheckJump()
 	{
 		if (InputManager.GetKeyDown(InputType.Jump))
 		{
 			if (lastGrounded == 0)
+			{
 				physicalController.Jump();
+				return true;
+			}
 		}
 		if (InputManager.GetKeyUp(InputType.Jump) && playerRb.velocity.y > 0)
 		{
 			physicalController.BreakJump();
 		}
+		return false;
 	}
+
+	public bool CheckDash()
+	{
+		lastDashTime += Time.deltaTime;
+		if (InputManager.GetKeyDown(InputType.Dash))
+		{
+			if (lastDashTime >= dashCoolDown)
+			{
+				StartCoroutine(physicalController.Dash());
+				lastDashTime = 0f;
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	//控制朝向
 	public void FaceTo()
@@ -192,18 +218,7 @@ public class PlayerController : MonoBehaviour
 		{
 			GameObject bulletInstance = Instantiate(bullet);
 			bulletInstance.SetActive(true);
-			float rotation = transform.localScale.x > 0 ? 0 : 180;
 			bulletInstance.transform.position = transform.position;
-			bulletInstance.transform.rotation = Quaternion.Euler(0, 0, rotation);
-			MoveTrack moveTrack = bulletInstance.AddComponent<MoveTrack>();
-			moveTrack.AddPattern(0);
-			//moveTrack.AddInstruction(new()
-			//{
-			//	speed = 20f,
-			//	type = MoveType.Move,
-			//	startTime = 0f,
-			//	endTime = 1f,
-			//});
 			Destroy(bulletInstance, bulletLifetime);
 		}
 	}

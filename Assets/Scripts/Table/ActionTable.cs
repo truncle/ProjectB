@@ -47,29 +47,38 @@ static public class ActionTable
 			id = ActionId.Jump,
 			type = ActionType.State,
 			totalFrames = 0,
-			cancelInfos = new List<CancelInfo>(){}
-		},
-		new(){
-			id = ActionId.ComboAttack01,
-			type = ActionType.Trigger,
-			totalFrames = 25,
 			cancelInfos = new List<CancelInfo>(){},
-			inputList = new(){InputType.Attack}
+			inputList = new(){InputType.Jump},
 		},
-		new(){
-			id = ActionId.ComboAttack02,
+		new()
+		{
+			id = ActionId.Dash,
 			type = ActionType.Trigger,
-			totalFrames = 21,
+			totalFrames = 13,
 			cancelInfos = new List<CancelInfo>(){},
-			inputList = new(){InputType.Attack}
+			inputList = new(){InputType.Dash},
 		},
-		new(){
-			id = ActionId.ComboAttack03,
-			type = ActionType.Trigger,
-			totalFrames = 17,
-			cancelInfos = new List<CancelInfo>(){},
-			inputList = new(){InputType.Attack}
-		},
+		//new(){
+		//	id = ActionId.ComboAttack01,
+		//	type = ActionType.Trigger,
+		//	totalFrames = 25,
+		//	cancelInfos = new List<CancelInfo>(){},
+		//	inputList = new(){InputType.Attack}
+		//},
+		//new(){
+		//	id = ActionId.ComboAttack02,
+		//	type = ActionType.Trigger,
+		//	totalFrames = 21,
+		//	cancelInfos = new List<CancelInfo>(){},
+		//	inputList = new(){InputType.Attack}
+		//},
+		//new(){
+		//	id = ActionId.ComboAttack03,
+		//	type = ActionType.Trigger,
+		//	totalFrames = 17,
+		//	cancelInfos = new List<CancelInfo>(){},
+		//	inputList = new(){InputType.Attack}
+		//},
 	};
 
 	static public ActionData GetAction(ActionId actionId)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PhysicalController
@@ -8,11 +9,17 @@ public class PhysicalController
 	public Rigidbody2D playerRb;
 	public Collider2D playerCollider;
 
-	private float moveSpeed = 10f;
+	public bool StopMoving { get; set; }
+
+	private float moveSpeed = 15f;
 	private float moveAcc = 80f;
-	private float slowAcc = 80f;
+	private float slowAcc = 60f;
 	private float jumpAcc = 20f;
 	private float reactRate = 0.5f;
+
+	private bool isDashing = false;
+	private float dashTime = 0.2f;
+	private float dashSpeed = 35f;
 
 	public PhysicalController(Rigidbody2D playerRb, Collider2D playerCollider)
 	{
@@ -23,20 +30,44 @@ public class PhysicalController
 	//更新物理状态
 	public void FixedUpdate()
 	{
-		Move();
+		if (!isDashing && !StopMoving)
+		{
+			Move();
+		}
 	}
 
 	public void Jump()
 	{
-		playerRb.velocity = new Vector2(playerRb.velocity.x, 0);
-		playerRb.AddForce(jumpAcc * playerRb.mass * Vector2.up, ForceMode2D.Impulse);
+		if (!isDashing && !StopMoving)
+		{
+			playerRb.velocity = new Vector2(playerRb.velocity.x, 0);
+			playerRb.AddForce(jumpAcc * playerRb.mass * Vector2.up, ForceMode2D.Impulse);
+		}
 	}
 	public void BreakJump()
 	{
-		playerRb.velocity = new Vector2(playerRb.velocity.x, playerRb.velocity.y / 3);
+		if (!isDashing && !StopMoving)
+		{
+			playerRb.velocity = new Vector2(playerRb.velocity.x, playerRb.velocity.y / 3);
+		}
 	}
 
-	private void Move()
+	public IEnumerator Dash()
+	{
+		if (isDashing || StopMoving)
+			yield break;
+		float gravityScale = playerRb.gravityScale;
+		playerRb.gravityScale = 0;
+		float speedSign = Mathf.Sign(playerRb.velocity.x);
+		isDashing = true;
+		//playerRb.AddForce(dashAcc * playerRb.mass * Vector2.right * speedSign);
+		playerRb.velocity = new Vector2(speedSign * dashSpeed, 0);
+		yield return new WaitForSeconds(dashTime);
+		playerRb.gravityScale = gravityScale;
+		isDashing = false;
+	}
+
+	public void Move()
 	{
 		float xInput = InputManager.GetAxisHorizontal();
 		float speedX = playerRb.velocity.x;
@@ -71,4 +102,5 @@ public class PhysicalController
 
 		playerRb.velocity = new Vector2(speedX, playerRb.velocity.y);
 	}
+
 }

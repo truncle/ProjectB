@@ -6,12 +6,12 @@ using UnityEngine;
 public class MoveStraight : MonoBehaviour
 {
     public float speed = 10f;
-    public float rotation;
+    public Vector2 rotation;
 
     // Start is called before the first frame update
     void Start()
     {
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotation));
+        transform.rotation = Quaternion.Euler(rotation);
     }
 
     // Update is called once per frame

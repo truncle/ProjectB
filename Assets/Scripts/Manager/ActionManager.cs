@@ -8,13 +8,11 @@ using UnityEngine;
 public class ActionManager : MonoBehaviour
 {
 	private Animator animator;
+	private Rigidbody2D playerRb; 
 
 	public int CurrentFrame { get; set; }
 
 	public ActionData CurrentAction { get; set; }
-
-	public float speedX = 0;
-	public float speedY = 0;
 
 	private List<ActionId> inputActions = new();
 
@@ -22,11 +20,14 @@ public class ActionManager : MonoBehaviour
 	void Start()
 	{
 		animator = GetComponent<Animator>();
+		playerRb = GetComponent<Rigidbody2D>();
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
+		animator.SetFloat("SpeedX", Mathf.Abs(playerRb.velocity.x));
+		animator.SetFloat("SpeedY", playerRb.velocity.y);
 	}
 
 	void FixedUpdate()
@@ -40,6 +41,7 @@ public class ActionManager : MonoBehaviour
 				nextAction = ActionTable.GetAction(CurrentAction.nextId.Value);
 			else
 				nextAction = ActionTable.GetStateAction();
+			Debug.Log(nextAction.id);
 			DoAction(nextAction);
 		}
 
@@ -78,6 +80,7 @@ public class ActionManager : MonoBehaviour
 	}
 	void DoAction(ActionId actionId, int startFrame = 0)
 	{
+		Debug.Log(actionId);
 		ActionData action = ActionTable.GetAction(actionId);
 		DoAction(action, startFrame);
 	}
