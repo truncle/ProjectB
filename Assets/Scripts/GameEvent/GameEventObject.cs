@@ -28,8 +28,7 @@ public class GameEventObject : MonoBehaviour
 		NotTriggerd, Running, Triggered
 	}
 
-	// Start is called before the first frame update
-	void Start()
+	void Awake()
 	{
 		Collider2D collider = GetComponent<Collider2D>();
 		if (collider == null)
@@ -37,6 +36,11 @@ public class GameEventObject : MonoBehaviour
 			collider = gameObject.AddComponent<BoxCollider2D>();
 			collider.isTrigger = true;
 		}
+	}
+
+	// Start is called before the first frame update
+	void Start()
+	{
 	}
 
 	// Update is called once per frame

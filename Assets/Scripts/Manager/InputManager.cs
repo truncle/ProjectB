@@ -30,6 +30,11 @@ public static class InputManager
 		{KeyCode.E, InputType.Interact },
 		{KeyCode.R, InputType.UseItem },
 
+		{KeyCode.J, InputType.Attack },
+		{KeyCode.K, InputType.Jump },
+		{KeyCode.L, InputType.Dash },
+		{KeyCode.U, InputType.Skill },
+
 		{KeyCode.KeypadEnter, InputType.OK },
 		{KeyCode.Return, InputType.OK },
 		{KeyCode.Escape, InputType.Cancel },
@@ -99,6 +104,12 @@ public static class InputManager
 		if (!raw && disableInput)
 			return 0f;
 		return Input.GetAxisRaw("Horizontal");
+	}
+	public static float GetAxisVertical(bool raw = false)
+	{
+		if (!raw && disableInput)
+			return 0f;
+		return Input.GetAxisRaw("Vertical");
 	}
 
 	//额外添加输入

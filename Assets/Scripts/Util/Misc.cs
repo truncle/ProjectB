@@ -48,7 +48,6 @@ static class Util
 	static public GameObject LoadPrefab(string path)
 	{
 		string finalPath = prefabPath + path;
-		Debug.Log(finalPath);
 		return Resources.Load<GameObject>(finalPath);
 	}
 }

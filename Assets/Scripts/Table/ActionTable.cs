@@ -3,24 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UnityEditor.UI;
 
 public struct ActionData
 {
-	public ActionId id;
+	public int id;
+	public string name;
 	public ActionType type;
 	public int totalFrames;
-	public ActionId? nextId;
-	public List<CancelInfo> cancelInfos;
-	public List<InputType> inputList; //输入方式
-}
-
-public struct CancelInfo
-{
-	public int startFrame;
-	public int endFrame;
-
-	public ActionId actionId;
-	public int toFrame;
+	public string nextAction;
 }
 
 public enum ActionType
@@ -29,68 +20,46 @@ public enum ActionType
 	Trigger,
 }
 
-public enum ActionId
-{
-	Move, Jump, Dash, ComboAttack01, ComboAttack02, ComboAttack03,
-}
-
 static public class ActionTable
 {
-	static public List<ActionData> actions = new(){
+	static public List<ActionData> testActionTable = new(){
 		new(){
-			id = ActionId.Move,
+			id = 0,
+			name = "move",
 			type = ActionType.State,
 			totalFrames = 0,
-			cancelInfos = new List<CancelInfo>(){},
 		},
 		new(){
-			id = ActionId.Jump,
+			id = 1,
+			name = "jump",
 			type = ActionType.State,
 			totalFrames = 0,
-			cancelInfos = new List<CancelInfo>(){},
-			inputList = new(){InputType.Jump},
 		},
-		new()
-		{
-			id = ActionId.Dash,
-			type = ActionType.Trigger,
-			totalFrames = 13,
-			cancelInfos = new List<CancelInfo>(){},
-			inputList = new(){InputType.Dash},
-		},
-		//new(){
-		//	id = ActionId.ComboAttack01,
-		//	type = ActionType.Trigger,
-		//	totalFrames = 25,
-		//	cancelInfos = new List<CancelInfo>(){},
-		//	inputList = new(){InputType.Attack}
-		//},
-		//new(){
-		//	id = ActionId.ComboAttack02,
-		//	type = ActionType.Trigger,
-		//	totalFrames = 21,
-		//	cancelInfos = new List<CancelInfo>(){},
-		//	inputList = new(){InputType.Attack}
-		//},
-		//new(){
-		//	id = ActionId.ComboAttack03,
-		//	type = ActionType.Trigger,
-		//	totalFrames = 17,
-		//	cancelInfos = new List<CancelInfo>(){},
-		//	inputList = new(){InputType.Attack}
-		//},
 	};
 
-	static public ActionData GetAction(ActionId actionId)
+	static public Dictionary<string, List<ActionData>> actionTables = new();
+
+	static public ActionData? GetAction(string tableName, string actionName)
 	{
-		var queryActions = actions.Where(a => a.id == actionId);
-		return queryActions.First();
+		List<ActionData> actionTable = LoadActionTable(tableName);
+		var queryActions = actionTable.Where(a => a.name == actionName);
+		return queryActions.Any() ? queryActions.First() : null;
 	}
 
-	static public ActionData GetStateAction()
+	static public ActionData DefaultAction(string tableName)
 	{
-		//获取当前的状态动作
-		return GetAction(ActionId.Move);
+		List<ActionData> actionTable = LoadActionTable(tableName);
+		return actionTable.First();
+	}
+
+	static private List<ActionData> LoadActionTable(string tableName)
+	{
+		if (!actionTables.ContainsKey(tableName))
+		{
+			//todo 加载actionTable
+			actionTables[tableName] = testActionTable;
+		}
+		return actionTables[tableName];
 	}
 }
 

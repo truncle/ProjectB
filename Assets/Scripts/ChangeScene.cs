@@ -29,6 +29,6 @@ public class ChangeScene : MonoBehaviour
 
 	public void LoadScene(string sceneName)
 	{
-		SceneManager.LoadSceneAsync(sceneName);
+		SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
 	}
 }

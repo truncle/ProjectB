@@ -4,12 +4,13 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PhysicalController
+public class PlayerPhysicalController : MonoBehaviour
 {
-	public Rigidbody2D playerRb;
-	public Collider2D playerCollider;
+	private Rigidbody2D playerRb;
+	private Collider2D playerCollider;
 
-	public bool StopMoving { get; set; }
+	public bool FreeMove { get; set; } = true;
+	public bool FreeTowards { get; set; } = true;
 
 	private float moveSpeed = 15f;
 	private float moveAcc = 80f;
@@ -17,28 +18,30 @@ public class PhysicalController
 	private float jumpAcc = 20f;
 	private float reactRate = 0.5f;
 
-	private bool isDashing = false;
 	private float dashTime = 0.2f;
 	private float dashSpeed = 35f;
 
-	public PhysicalController(Rigidbody2D playerRb, Collider2D playerCollider)
+	private void Start()
 	{
-		this.playerRb = playerRb;
-		this.playerCollider = playerCollider;
+		playerRb = GetComponent<Rigidbody2D>();
+		playerCollider = GetComponent<Collider2D>();
 	}
 
+
 	//更新物理状态
-	public void FixedUpdate()
+	void FixedUpdate()
 	{
-		if (!isDashing && !StopMoving)
+		if (FreeMove)
 		{
 			Move();
+			if (FreeTowards)
+				Towards();
 		}
 	}
 
 	public void Jump()
 	{
-		if (!isDashing && !StopMoving)
+		if (FreeMove)
 		{
 			playerRb.velocity = new Vector2(playerRb.velocity.x, 0);
 			playerRb.AddForce(jumpAcc * playerRb.mass * Vector2.up, ForceMode2D.Impulse);
@@ -46,7 +49,7 @@ public class PhysicalController
 	}
 	public void BreakJump()
 	{
-		if (!isDashing && !StopMoving)
+		if (FreeMove)
 		{
 			playerRb.velocity = new Vector2(playerRb.velocity.x, playerRb.velocity.y / 3);
 		}
@@ -54,17 +57,18 @@ public class PhysicalController
 
 	public IEnumerator Dash()
 	{
-		if (isDashing || StopMoving)
+		if (!FreeMove)
 			yield break;
 		float gravityScale = playerRb.gravityScale;
+		FreeMove = false;
+		FreeTowards = false;
 		playerRb.gravityScale = 0;
-		float speedSign = Mathf.Sign(playerRb.velocity.x);
-		isDashing = true;
 		//playerRb.AddForce(dashAcc * playerRb.mass * Vector2.right * speedSign);
-		playerRb.velocity = new Vector2(speedSign * dashSpeed, 0);
+		playerRb.velocity = new Vector2(Mathf.Sign(transform.localScale.x) * dashSpeed, 0);
 		yield return new WaitForSeconds(dashTime);
 		playerRb.gravityScale = gravityScale;
-		isDashing = false;
+		FreeTowards = true;
+		FreeMove = true;
 	}
 
 	public void Move()
@@ -74,7 +78,7 @@ public class PhysicalController
 		float speedSign = Mathf.Sign(speedX);
 		float deltaSpeedX = 0f;
 
-		//如果当前速度与目标速度相反则计算冲突比例
+		//如果当前速度与目标速度相反则计算冲突比例, 施加额外的减速力
 		if (Mathf.Abs(xInput) > 0.01)
 		{
 			float oppositeRate = 0f;
@@ -103,4 +107,18 @@ public class PhysicalController
 		playerRb.velocity = new Vector2(speedX, playerRb.velocity.y);
 	}
 
+	//控制朝向
+	public void Towards()
+	{
+		float xInput = InputManager.GetAxisHorizontal();
+		if (xInput != 0)
+		{
+			transform.localScale = new Vector3(Mathf.Sign(xInput) * Mathf.Abs(transform.localScale.x), transform.localScale.y, 1);
+		}
+	}
+
+	public void Stop()
+	{
+		playerRb.velocity = Vector2.zero;
+	}
 }
