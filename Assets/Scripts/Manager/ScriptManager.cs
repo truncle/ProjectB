@@ -17,25 +17,33 @@ public class ScriptManager
 	}
 
 	private GameObject textWindow;
+	private string windowId;
 
 	public int ReadScript(int scriptId, int process, out bool isFinish)
 	{
 		InputManager.DisableInput();
-		GameObject textWindowPrefab = Util.LoadPrefab("UI TextWindow");
 		if (!textWindow)
-			textWindow = Object.Instantiate(textWindowPrefab);
-		TextMeshProUGUI tmp = textWindow.GetComponentInChildren<TextMeshProUGUI>();
+		{
+			windowId = WindowManager.Instance.OpenWindow("test");
+			textWindow = WindowManager.Instance.GetWindow(windowId);
+		}
 		string scriptText = ScriptTable.GetScript(scriptId).PrintScript();
-		tmp.SetText(scriptText);
+		ChangeText(scriptText);
 		Debug.Log(string.Format("Trigger script id:{0}, process:{1}", scriptId, process));
 		if (process >= 4)
 		{
 			isFinish = true;
-			Object.Destroy(textWindow);
+			WindowManager.Instance.CloseWindow(windowId);
 			InputManager.EnableInput();
 		}
 		else isFinish = false;
 		process++;
 		return process;
 	}
+
+	public void ChangeText(string text)
+    {
+		TextMeshProUGUI tmp = textWindow.GetComponentInChildren<TextMeshProUGUI>();
+		tmp.SetText(text);
+    }
 }

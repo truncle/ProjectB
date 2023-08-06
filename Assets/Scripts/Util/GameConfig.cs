@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 static class GameConfig
 {
-	
+    static public Dictionary<string, string> windowNameToPath = new()
+    {
+        { "test", "UI TextWindow" }
+    };
 }
