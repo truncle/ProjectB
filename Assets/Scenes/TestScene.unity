@@ -658,10 +658,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   eventType: 0
-  id: 2
+  idList: 0200000003000000
+  idType: 0
   needInteract: 1
-  process: 0
-  status: 0
 --- !u!212 &892768878
 SpriteRenderer:
   m_ObjectHideFlags: 0
