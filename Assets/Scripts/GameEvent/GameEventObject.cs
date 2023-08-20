@@ -25,10 +25,6 @@ public class GameEventObject : MonoBehaviour
     {
         Script,
     }
-    public enum EventStatus
-    {
-        NotTriggerd, Running, Triggered
-    }
 
     void Awake()
     {
@@ -78,7 +74,7 @@ public class GameEventObject : MonoBehaviour
     //只要在碰撞箱内且进度没满就持续触发事件
     private bool CheckTriggerEvent(int id, EventStatus status, int process)
     {
-        if (canTrigger && status == EventStatus.NotTriggerd && (!needInteract || InputManager.GetKeyDown(InputType.Interact)))
+        if (canTrigger && status == EventStatus.NotTriggered && (!needInteract || InputManager.GetKeyDown(InputType.Interact)))
         {
             TriggerEvent(id, process, false);
             return true;
@@ -104,8 +100,8 @@ public class GameEventObject : MonoBehaviour
         {
             if (isUpdate)
             {
-                processMap[id] = ScriptManager.Instance.UpdateScript(id, idType, process, out bool isFinish);
-                if (isFinish) statusMap[id] = EventStatus.Triggered;
+                processMap[id] = ScriptManager.Instance.UpdateScript(id, idType, process, out EventStatus status);
+                statusMap[id] = status;
             }
             else
             {

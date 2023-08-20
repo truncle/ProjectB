@@ -24,9 +24,10 @@ public class ScriptManager
     private GameObject textWindow;
     private string windowId;
 
-    private bool finishSign = false;
+    private int currStep = 0;
+    private int statusSign = 0;
 
-    public int ReadScript(int scriptId, int type, int process)
+    public int ReadScript(int scriptId, int type, int step)
     {
         InputManager.DisableInput();
         if (!textWindow)
@@ -36,26 +37,26 @@ public class ScriptManager
         }
         switch ((ScriptType)type)
         {
-            case ScriptType.Dialog: ReadDialog(scriptId, process); break;
+            case ScriptType.Dialog: ReadDialog(scriptId, step); break;
         }
-        Debug.Log(string.Format("Trigger script id:{0}, type:{1}, process:{2}", scriptId, ((ScriptType)type).ToString(), process));
-        return process;
+        Debug.Log(string.Format("Trigger script id:{0}, type:{1}, step:{2}", scriptId, ((ScriptType)type).ToString(), currStep));
+        return currStep;
     }
 
-    public int UpdateScript(int scriptId, int type, int process, out bool isFinish)
+    public int UpdateScript(int scriptId, int type, int step, out EventStatus status)
     {
-        if (isFinish = CheckFinish())
+        status = CheckStatus();
+        if (status != EventStatus.Running)
         {
-            return process;
+            return currStep;
         }
-        process++;
         switch ((ScriptType)type)
         {
-            case ScriptType.Dialog: ReadDialog(scriptId, process); break;
+            case ScriptType.Dialog: ReadDialog(scriptId, step); break;
         }
-        Debug.Log(string.Format("Update script id:{0}, type:{1}, process:{2}", scriptId, ((ScriptType)type).ToString(), process));
-        isFinish = false;
-        return process;
+        Debug.Log(string.Format("Update script id:{0}, type:{1}, step:{2}", scriptId, ((ScriptType)type).ToString(), step));
+        status = EventStatus.Running;
+        return currStep;
     }
 
     public void ChangeText(string text)
@@ -64,24 +65,34 @@ public class ScriptManager
         tmp.SetText(text);
     }
 
-    public bool CheckFinish()
+    public EventStatus CheckStatus()
     {
-        if (finishSign)
+        EventStatus status = EventStatus.Running;
+        if (statusSign != 0)
         {
             WindowManager.Instance.CloseWindow(windowId);
             InputManager.EnableInput();
-            finishSign = false;
-            return true;
+            switch (statusSign)
+            {
+                case 1: status = EventStatus.Triggered; break;
+                case 2:
+                    status = EventStatus.NotTriggered;
+                    currStep = 0;
+                    break;
+            }
+            statusSign = 0;
+            return status;
         }
-        return false;
+        return status;
     }
 
-    public void ReadDialog(int scriptId, int process)
+    public void ReadDialog(int scriptId, int step)
     {
         ScriptData<ScriptDialog> scriptData = ScriptTable.GetScript<ScriptDialog>(scriptId, ScriptType.Dialog);
-        ScriptDialog dialoagData = scriptData.data[process];
+        ScriptDialog dialoagData = scriptData.data[step];
         ChangeText(dialoagData.ToString());
-        finishSign = dialoagData.finishSign;
+        statusSign = dialoagData.status;
+        currStep = step + 1;//todo 改成读表
     }
 }
 
