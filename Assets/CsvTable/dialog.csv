@@ -1,0 +1,3 @@
+id,groupId,text,characterId,expressionId,isFinish
+123,12,测试1,2,1,0
+124,12,测试2,2,1,1

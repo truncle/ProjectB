@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEditor;
 using UnityEngine;
 
@@ -6,6 +9,7 @@ using UnityEngine;
 static class Util
 {
 	static string prefabPath = "Prefabs/";
+	static string tableFolderPath = Application.dataPath + "/CsvTable/";
 
 	static public void PrintBox(Vector2 topLeft, Vector2 bottomRight)
 	{
@@ -49,5 +53,25 @@ static class Util
 	{
 		string finalPath = prefabPath + path;
 		return Resources.Load<GameObject>(finalPath);
+	}
+
+	static public Dictionary<int, Dictionary<string, string>> ReadCsv(string filePath)
+	{
+		string path = tableFolderPath + filePath;
+		using StreamReader reader = new(path, Encoding.UTF8);
+		Dictionary<int, Dictionary<string, string>> result = new();
+		string[] fields = reader.ReadLine().Split(",");
+		string line = null;
+		while ((line = reader.ReadLine()) != null)
+		{
+			string[] lineDataTmp = line.Split(",");
+			Dictionary<string, string> lineData = new();
+			for (int i = 0; i < fields.Length; i++)
+			{
+				lineData.Add(fields[i], lineDataTmp[i]);
+			}
+			result.Add(Convert.ToInt32(lineData["id"]), lineData);
+		}
+		return result;
 	}
 }
