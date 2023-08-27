@@ -36,7 +36,8 @@ public struct ScriptDialog
     public int status;
     public int step;
     public string text;//通常对话文本
-    public Dictionary<int, string> optionDialog;
+    public int[] followTextIds;
+    public string[] optionText;
 
     public string characterName; //对话框显示的角色名
 
@@ -98,15 +99,18 @@ public static class ScriptTable
             var pictureId = dialogDataRaw["picId"];
             var soundId = dialogDataRaw["soundId"];
             var textId = dialogDataRaw["textId"];
-            Dictionary<int, string> optionDialog = null;
+            int[] followTextIds = null;
+            string[] optionText = null;
             if (dialogDataRaw["followTextId"] != string.Empty)
             {
-                optionDialog = new();
                 var textIds = dialogDataRaw["textId"].Split("|");
-                var followTextIds = dialogDataRaw["followTextId"].Split("|");
-                for (var i = 0; i < followTextIds.Length; i++)
+                var followIdsRaw = dialogDataRaw["followTextId"].Split("|");
+                followTextIds = new int[followIdsRaw.Length];
+                optionText = new string[followIdsRaw.Length];
+                for (var i = 0; i < followIdsRaw.Length; i++)
                 {
-                    optionDialog.Add(Convert.ToInt32(followTextIds[i]), textTable[textIds[i]]["text"]);
+                    followTextIds[i] = Convert.ToInt32(followIdsRaw[i]);
+                    optionText[i] = textTable[textIds[i]]["text"];
                 }
             }
             ScriptDialog dialogData = new()
@@ -119,7 +123,8 @@ public static class ScriptTable
                 status = Convert.ToInt32(dialogDataRaw["status"]),
                 step = Convert.ToInt32(dialogDataRaw["step"]),
                 text = textTable.ContainsKey(textId) ? textTable[textId]["text"] : string.Empty,
-                optionDialog = optionDialog,
+                followTextIds = followTextIds,
+                optionText = optionText,
 
                 characterName = textTable.ContainsKey(textId) ? textTable[textId]["name"] : string.Empty,
             };

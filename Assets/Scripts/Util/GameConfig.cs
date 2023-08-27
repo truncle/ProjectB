@@ -8,6 +8,7 @@ static class GameConfig
 {
     static public Dictionary<string, string> windowNameToPath = new()
     {
-        { "test", "UI TextWindow" }
+        { "text", "UI TextWindow" },
+        { "selection", "UI SelectionWindow" }
     };
 }

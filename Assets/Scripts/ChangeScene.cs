@@ -25,6 +25,7 @@ public class ChangeScene : MonoBehaviour
 		{
 			SceneManager.LoadSceneAsync(sceneName);
 		}
+		collision.transform.position = Vector3.zero;
 	}
 
 	public void LoadScene(string sceneName)
