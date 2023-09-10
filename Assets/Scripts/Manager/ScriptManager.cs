@@ -30,7 +30,12 @@ public class ScriptManager
 
     private string GetDialogWindowName(ScriptDialog dialog)
     {
-        return dialog.followTextIds == null ? "text" : "selection";
+        string windowName = dialog.followTextIds == null ? "text" : "selection";
+        if (windowName == "text" && dialog.boxId == 102)
+        {
+            windowName = "text2";
+        }
+        return windowName;
     }
 
     public int ReadScript(int scriptId, int type, int step)

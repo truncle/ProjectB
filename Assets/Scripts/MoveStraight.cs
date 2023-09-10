@@ -5,8 +5,9 @@ using UnityEngine;
 
 public class MoveStraight : MonoBehaviour
 {
-    public float speed = 10f;
+    public float speed = 5f;
     public Vector2 rotation;
+    public float LifeTime = 0.4f;
 
     // Start is called before the first frame update
     void Start()
@@ -18,5 +19,6 @@ public class MoveStraight : MonoBehaviour
     void Update()
     {
         transform.Translate(speed * Time.deltaTime * Vector3.right);
-	}
+    }
+
 }

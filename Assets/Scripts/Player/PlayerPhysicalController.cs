@@ -21,6 +21,9 @@ public class PlayerPhysicalController : MonoBehaviour
 	private float dashTime = 0.2f;
 	private float dashSpeed = 35f;
 
+	public GameObject DashFX;
+
+
 	private void Start()
 	{
 		playerRb = GetComponent<Rigidbody2D>();
@@ -59,6 +62,7 @@ public class PlayerPhysicalController : MonoBehaviour
 	{
 		if (!FreeMove)
 			yield break;
+		DashFX.SetActive(true);
 		float gravityScale = playerRb.gravityScale;
 		FreeMove = false;
 		FreeTowards = false;
@@ -69,6 +73,7 @@ public class PlayerPhysicalController : MonoBehaviour
 		playerRb.gravityScale = gravityScale;
 		FreeTowards = true;
 		FreeMove = true;
+		DashFX.SetActive(false);
 	}
 
 	public void Move()

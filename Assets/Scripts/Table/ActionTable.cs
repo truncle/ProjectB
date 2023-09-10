@@ -22,19 +22,27 @@ public enum ActionType
 
 static public class ActionTable
 {
-	static public List<ActionData> testActionTable = new(){
-		new(){
+	static public List<ActionData> testActionTable = new() {
+		new() {
 			id = 0,
 			name = "move",
 			type = ActionType.State,
 			totalFrames = 0,
 		},
-		new(){
+		new() {
 			id = 1,
 			name = "jump",
 			type = ActionType.State,
 			totalFrames = 0,
 		},
+		new()
+		{
+			id = 2,
+			name = "attacked",
+			type = ActionType.Trigger,
+			totalFrames = 25,
+			nextAction = "move",
+        }
 	};
 
 	static public Dictionary<string, List<ActionData>> actionTables = new();

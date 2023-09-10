@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Ground
   - EventTrigger
+  - Attack
   layers:
   - Default
   - TransparentFX

@@ -9,7 +9,7 @@ using UnityEngine;
 public class ActionController : MonoBehaviour
 {
 	protected Animator animator;
-	protected PhysicalController physicalController;
+	//protected PhysicalController physicalController;
 	protected Rigidbody2D rb;
 
 	public string actionTableName;
@@ -23,6 +23,8 @@ public class ActionController : MonoBehaviour
 
 	protected List<string> inputActions = new();
 
+	public GameObject AttackedFX;
+
 	// Start is called before the first frame update
 	void Start()
 	{
@@ -35,8 +37,8 @@ public class ActionController : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		animator.SetFloat("SpeedX", Mathf.Abs(rb.velocity.x));
-		animator.SetFloat("SpeedY", rb.velocity.y);
+		//animator.SetFloat("SpeedX", Mathf.Abs(rb.velocity.x));
+		//animator.SetFloat("SpeedY", rb.velocity.y);
 	}
 
 	void FixedUpdate()
@@ -60,8 +62,8 @@ public class ActionController : MonoBehaviour
 
 		if (nextAction != null)
 			DoAction(nextAction, startFrame);
-		else
-			physicalController.DoAction(CurrentAction.name, CurrentFrame);
+		//else
+			//physicalController.DoAction(CurrentAction.name, CurrentFrame);
 	}
 
 	public void AddInputAction(List<string> inputActions)
@@ -75,11 +77,19 @@ public class ActionController : MonoBehaviour
 		{
 			CurrentAction = actionData.Value;
 			CurrentFrame = 0;
-			animator.CrossFade(actionData.Value.id.ToString(), (float)startFrame * 2 / 100);
-			physicalController.DoAction(actionData.Value.name, startFrame);
+			animator.CrossFade(actionData.Value.name, (float)startFrame * 2 / 100);
+            if (actionData.Value.name == "attacked")
+            {
+				AttackedFX.SetActive(true);
+            }
+            else
+            {
+				AttackedFX.SetActive(false);
+            }
+			//physicalController.DoAction(actionData.Value.name, startFrame);
 		}
 	}
-	void DoAction(string actionName, int startFrame = 0)
+	public void DoAction(string actionName, int startFrame = 0)
 	{
 		DoAction(ActionTable.GetAction(actionTableName, actionName), startFrame);
 	}

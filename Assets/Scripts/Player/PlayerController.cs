@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
 
 	public PlayerPhysicalController physicalController;
 	private PlayerActionController actionController;
+	public GameObject shootPoint;
 
 	private Rigidbody2D playerRb;
 	private Collider2D playerCollider;
@@ -21,7 +22,7 @@ public class PlayerController : MonoBehaviour
 	//ø…µ˜≈‰÷√
 	[SerializeField]
 	private GameObject bullet;
-	private float bulletLifetime = 3f;
+	private float bulletLifetime = 0.4f;
 	private float dashCoolDown = 1f;
 	private float chargeStateTime1 = 1f;
 	private float chargeStateTime2 = 1f;
@@ -152,7 +153,7 @@ public class PlayerController : MonoBehaviour
 		{
 			GameObject bulletInstance = Instantiate(bullet);
 			bulletInstance.SetActive(true);
-			bulletInstance.transform.position = transform.position;
+			bulletInstance.transform.position = shootPoint.transform.position;
 			Destroy(bulletInstance, bulletLifetime);
 		}
 	}

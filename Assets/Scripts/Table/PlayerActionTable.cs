@@ -55,28 +55,29 @@ static public class PlayerActionTable
 			totalFrames = 10,
 			inputList = new(){InputType.Dash},
 		},
-		//new(){
-		//	id = ActionId.ComboAttack01,
-		//	type = ActionType.Trigger,
-		//	totalFrames = 25,
-		//	cancelInfos = new List<CancelInfo>(){},
-		//	inputList = new(){InputType.Attack}
-		//},
-		//new(){
-		//	id = ActionId.ComboAttack02,
-		//	type = ActionType.Trigger,
-		//	totalFrames = 21,
-		//	cancelInfos = new List<CancelInfo>(){},
-		//	inputList = new(){InputType.Attack}
-		//},
-		//new(){
-		//	id = ActionId.ComboAttack03,
-		//	type = ActionType.Trigger,
-		//	totalFrames = 17,
-		//	cancelInfos = new List<CancelInfo>(){},
-		//	inputList = new(){InputType.Attack}
-		//},
-	};
+        new()
+        {
+            id = ActionId.ComboAttack01,
+            type = ActionType.Trigger,
+            totalFrames = 25,
+            cancelInfos = new List<CancelInfo>() { },
+            inputList = new() { InputType.Attack }
+        },
+        //new(){
+        //	id = ActionId.ComboAttack02,
+        //	type = ActionType.Trigger,
+        //	totalFrames = 21,
+        //	cancelInfos = new List<CancelInfo>(){},
+        //	inputList = new(){InputType.Attack}
+        //},
+        //new(){
+        //	id = ActionId.ComboAttack03,
+        //	type = ActionType.Trigger,
+        //	totalFrames = 17,
+        //	cancelInfos = new List<CancelInfo>(){},
+        //	inputList = new(){InputType.Attack}
+        //},
+    };
 
 	static public PlayerActionData? GetAction(ActionId actionId)
 	{

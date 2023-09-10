@@ -20,6 +20,14 @@ public class FollowPlayer : MonoBehaviour
 
 	private void LateUpdate()
 	{
-		transform.position = new Vector3(playerTransform.position.x + playerpositionx, playerTransform.position.y + playerpositiony, transform.position.z);
+		StartCoroutine("doSm");
+		//transform.position = new Vector3(playerTransform.position.x + playerpositionx, playerTransform.position.y + playerpositiony, transform.position.z);
 	}
+
+	private IEnumerator doSm()
+    {
+		Vector3 position = new Vector3(playerTransform.position.x + playerpositionx, playerTransform.position.y + playerpositiony, transform.position.z);
+		yield return new WaitForSeconds(0.1f);
+		transform.position = position;
+    }
 }
